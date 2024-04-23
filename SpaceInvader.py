@@ -19,6 +19,15 @@ PLAYER_WIDTH, PLAYER_HEIGHT = 50, 20
 PLAYER_SPEED = 5
 score = 0
 highscorelist = [0,0,0,0,0]
+
+# Bild laden und Größe anpassen Spieler 
+spielerbild = pygame.image.load('rocket.png')
+spielerbild = pygame.transform.scale(spielerbild, (PLAYER_WIDTH, PLAYER_HEIGHT))
+
+# Hintergrundbild laden
+background = pygame.image.load('weltall.jpg')
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+
 # Gegner Eigenschaften
 ENEMY_WIDTH, ENEMY_HEIGHT = 30, 30
 ENEMY_SPEED = 3
@@ -42,17 +51,22 @@ def move_enemies(enemies):
 
 # Funktion zum Zeichnen des Spielers
 def draw_player(player):
-    pygame.draw.rect(screen, RED, player)
+    screen.blit(spielerbild, (player.x, player.y))
 
 # Funktion zum Zeichnen der Gegner
 def draw_enemies(enemies):
     add_ons_PyGame.draw_enemies(enemies, screen)  # Hier die Funktion aus der separaten Datei aufrufen
 
+# Funktion zum Zeichnen der Schüsse
+def draw_bullets(bullets):
+    for bullet in bullets:
+        pygame.draw.rect(screen, RED, pygame.Rect(bullet[0], bullet[1], 5, 10))  # Schuss als einfaches Rechteck zeichnen
 
 # Hauptspiel
 def main(score):
     player = pygame.Rect(WIDTH // 2 - PLAYER_WIDTH // 2, HEIGHT - 50, PLAYER_WIDTH, PLAYER_HEIGHT)
     enemies = []
+    bullets = []
     
     running = True
     while running:
@@ -64,12 +78,27 @@ def main(score):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        #Mausposition abrufen 
+        mouse_x, mouse_y = pygame.mouse.get_pos() 
 
+        #Spielerpostion basierend auf Mauspostion 
+        player.x = max(0, min(mouse_x - PLAYER_WIDTH // 2, WIDTH - PLAYER_WIDTH))
+        player.y = max(200, min(mouse_y - PLAYER_HEIGHT // 2, HEIGHT - PLAYER_HEIGHT))
+
+        # Bewege die Schüsse             
+        for bullet in bullets:
+            bullet[1] -= 10
+            if bullet[1] < 0:
+                bullets.remove(bullet)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            player.x -= PLAYER_SPEED
-        if keys[pygame.K_RIGHT]:
-            player.x += PLAYER_SPEED
+        if keys[pygame.K_SPACE]:
+            bullets.append([player.x + PLAYER_WIDTH // 2, player.y])
+    
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_LEFT]:
+        #     player.x -= PLAYER_SPEED
+        # if keys[pygame.K_RIGHT]:
+        #     player.x += PLAYER_SPEED
 
         # Begrenze den Spieler auf den Bildschirm
         player.x = max(0, min(player.x, WIDTH - PLAYER_WIDTH))
@@ -85,8 +114,10 @@ def main(score):
                 running = False
 
         # Zeichne Spieler und Gegner
+        screen.blit(background, (0,0))
         draw_player(player)
         draw_enemies(enemies)
+        draw_bullets(bullets)
 
         pygame.display.flip()
         clock.tick(60)      
