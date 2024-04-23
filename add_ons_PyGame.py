@@ -26,15 +26,17 @@ def drawscore(score,BLACK,screen):
     text = display_field.render(f"Score:{score}", True,BLACK)
     screen.blit(text,(450,5))
 
-def highscore(score,highscorelist,screen,BLACK,WHITE):
-    highscorelist.append(score)
-    highscorelist.sort(reverse=True)
+def save_highscore(score):
+    with open('savescores.txt', 'w') as file:
+        file.write(str(score))
 
-    screen.fill(WHITE)
-    display_field = pygame.font.Font(None,35)
-    scorelist = display_field.render(f"Highscorelist:\n 1. {highscorelist[0]} \n 2. {highscorelist[1]} \n 3. {highscorelist[2]} \n 4. {highscorelist[3]} \n 5. {highscorelist[4]}", True,BLACK)
-    screen.blit(scorelist,(5,5))
-    pygame.display.flip()
+def load_highscore():
+    try:
+        with open('savescores.txt', 'r') as file:
+            return int(file.read())
+    except FileNotFoundError:
+        return 0
+
 
 def gameover(screen,RED):
     display_field = pygame.font.Font(None,100)

@@ -91,7 +91,9 @@ def main(score):
         pygame.display.flip()
         clock.tick(60)      
     add_ons_PyGame.gameover(screen,RED)
-    add_ons_PyGame.highscore(score,highscorelist,screen,BLACK,WHITE)
+    add_ons_PyGame.save_highscore(score)
+    final_score = add_ons_PyGame.load_highscore
+    print(f"your score {final_score}")
     add_ons_PyGame.gameloop
     
     
