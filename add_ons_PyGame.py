@@ -4,7 +4,7 @@ import random
 from PIL import Image
 import requests
 from io import BytesIO
-
+import json
 
 ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst
 
@@ -26,16 +26,30 @@ def drawscore(score,BLACK,screen):
     text = display_field.render(f"Score:{score}", True,BLACK)
     screen.blit(text,(450,5))
 
-def save_highscore(score):
-    with open('savescores.txt', 'w') as file:
-        file.write(str(score))
+def save_score(score):
+    with open('Bestenliste.json', 'w') as file:
+        json.dump(score, file)
 
-def load_highscore():
+def load_scores():
     try:
-        with open('savescores.txt', 'r') as file:
-            return int(file.read())
+        with open('Bestenliste.json', 'r') as file:
+            return json.load(file)
     except FileNotFoundError:
-        return 0
+        return {}
+
+def update_higscorelist(name, score):
+    highscores = load_scores()
+    if name in highscores:
+        highscores[name] = max(highscores[name], score)
+    else:
+        highscores[name] = score
+    save_score(highscores)
+
+# Beispiel:
+# update_leaderboard("Alice", 150)
+# update_leaderboard("Bob", 200)
+# update_leaderboard("Alice", 180)
+
 
 
 def gameover(screen,RED):
