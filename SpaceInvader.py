@@ -18,7 +18,7 @@ will_to_play = "y"
 PLAYER_WIDTH, PLAYER_HEIGHT = 50, 20
 PLAYER_SPEED = 5
 score = 0
-highscorelist = [0,0,0,0,0]
+
 
 # Bild laden und Größe anpassen Spieler 
 spielerbild = pygame.image.load('rocket.png')
@@ -123,7 +123,7 @@ def main(score):
         clock.tick(60)      
     add_ons_PyGame.gameover(screen,RED)
     name = input("enter your name:")
-    add_ons_PyGame.update_higscorelist(name,score)
+    add_ons_PyGame.update_highscore_list(name,score)
     add_ons_PyGame.gameloop()
     
     
