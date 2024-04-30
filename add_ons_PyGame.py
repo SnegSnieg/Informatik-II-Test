@@ -95,7 +95,15 @@ def get_end_game_input(screen, clock):
             pygame.display.flip()
             clock.tick(60)
             return user_text
-
+def highscore(score, highest):
+    if score > highscore:
+        highscore = score
+        highscore_name = name
+        highest = [highscore_name, highscore]
+    else:
+        pass
+    return highest
+    
 # Funktion zum Schreiben der Werte eines Array als Zeilen in eine csv-Datei
 def write_to_csv(array, filename):
     with open(filename, 'a', newline='') as csvfile:
