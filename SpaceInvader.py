@@ -122,8 +122,12 @@ def main(score):
         pygame.display.flip()
         clock.tick(60)      
     add_ons_PyGame.gameover(screen,RED)
-    name = input("enter your name:")
-    add_ons_PyGame.update_highscore_list(name,score)
+    time.sleep(1)
+    name = add_ons_PyGame.get_end_game_input(screen, clock)
+    score_name = [name, score]
+    add_ons_PyGame.write_to_csv(score_name,'highscore.csv')
+    highscore_list = add_ons_PyGame.read_from_csv('highscore.csv')
+    print(highscore_list)
     add_ons_PyGame.gameloop()
     
     

@@ -1,51 +1,6 @@
-import pygame
-import time
-import random
-from PIL import Image
-import requests
-from io import BytesIO
 import csv
+import pygame
 import sys
-
-ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst
-
-def draw_enemies(enemies, screen):
-    # Bild laden und Größe anpassen
-    gegnerBild = pygame.image.load("Enemypicture.png")
-    gegnerBild = pygame.transform.scale(gegnerBild, (ENEMY_WIDTH, ENEMY_HEIGHT))
-    for enemy in enemies:
-        # Zeichne das Gegnerbild an der Position des Gegners
-        screen.blit(gegnerBild, (enemy.x, enemy.y))
-pass
-
-def scorecounting(score,ENEMY_SPEED):
-    score += ENEMY_SPEED
-    return score
-
-def drawscore(score,BLACK,screen):
-    display_field = pygame.font.Font(None,25)
-    text = display_field.render(f"Score:{score}", True,BLACK)
-    screen.blit(text,(450,5))
-
-# versuch Json
-# def save_score(score):
-#     with open('Bestenliste.json', 'w') as file:
-#         json.dump(score, file)
-
-# def load_scores():
-#     try:
-#         with open('Bestenliste.json', 'r') as file:
-#             return json.load(file)
-#     except FileNotFoundError:
-#         return {}
-
-# def update_higscorelist(name, score):
-#     highscores = load_scores()
-#     if name in highscores:
-#         highscores[name] = max(highscores[name], score)
-#     else:
-#         highscores[name] = score
-#     save_score(highscores)
 
 # Funktion für die Usereingabe am Ende des Spiels
 def get_end_game_input(screen, clock):
@@ -94,14 +49,13 @@ def get_end_game_input(screen, clock):
 
             pygame.display.flip()
             clock.tick(60)
-            return text
+
 
 # Funktion zum Schreiben der Werte eines Array als Zeilen in eine csv-Datei
 def write_to_csv(array, filename):
     with open(filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerows(array)
-
 
 # Funktion zum Lesen der Zeilen einer csv-Datei und speichern in einem Array
 def read_from_csv(filename):
@@ -112,23 +66,22 @@ def read_from_csv(filename):
             array.append(row)
     return array
 
+# Beispiel-Arrays für die Demonstration
+example_array = [
+    ["Julia", 200],
+    ["Chris", 6000],
+    ["Marie", 8000]
+]
 
-# Beispiel:
-# update_leaderboard("Alice", 150)
-# update_leaderboard("Bob", 200)
-# update_leaderboard("Alice", 180)
+# Test der Funktionen
+write_to_csv(example_array, 'highscore.csv')
+loaded_array = read_from_csv('highscore.csv')
 
+# Ausgabe der Werte
+print("Original Array:")
+for row in example_array:
+    print(row)
 
-
-def gameover(screen,RED):
-    display_field = pygame.font.Font(None,100)
-    text = display_field.render("GAME OVER", True,RED)
-    screen.blit(text,(100,70))
-    pygame.display.flip()
-    time.sleep(1)
-
-def gameloop():
-    pygame.quit()
-
-# Gegner Eigenschaften
-ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst
+print("\nGeladenes Array aus der CSV-Datei:")
+for row in loaded_array:
+    print(row)
