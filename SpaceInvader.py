@@ -68,6 +68,7 @@ def main(score):
     enemies = []
     bullets = []
     
+    shoot_cooldown = 0
     running = True
     while running:
         
@@ -91,8 +92,13 @@ def main(score):
             if bullet[1] < 0:
                 bullets.remove(bullet)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and shoot_cooldown <= 0:
             bullets.append([player.x + PLAYER_WIDTH // 2, player.y])
+            shoot_cooldown = 30  # Setze die Abklingzeit (z. B. 30 Frames)
+
+        # Verringere die Abklingzeit
+        if shoot_cooldown > 0:
+            shoot_cooldown -= 1
     
         # keys = pygame.key.get_pressed()
         # if keys[pygame.K_LEFT]:
@@ -112,6 +118,10 @@ def main(score):
         for enemy in enemies:
             if player.colliderect(enemy):
                 running = False
+            for bullet in bullets:
+                if enemy.colliderect(pygame.Rect(bullet[0], bullet[1], 5, 10)):
+                    enemies.remove(enemy)  # Entferne den getroffenen Gegner
+                    bullets.remove(bullet)  # Entferne die Kugel
 
         # Zeichne Spieler und Gegner
         screen.blit(background, (0,0))
