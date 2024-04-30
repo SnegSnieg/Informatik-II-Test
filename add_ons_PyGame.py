@@ -26,24 +26,43 @@ def drawscore(score,BLACK,screen):
     text = display_field.render(f"Score:{score}", True,BLACK)
     screen.blit(text,(450,5))
 
-def save_score(score):
+# def save_score(score):
+#     with open('Bestenliste.json', 'w') as file:
+#         json.dump(score, file)
+
+# def load_scores():
+#     try:
+#         with open('Bestenliste.json', 'r') as file:
+#             return json.load(file)
+#     except FileNotFoundError:
+#         return {}
+
+# def update_higscorelist(name, score):
+#     highscores = load_scores()
+#     if name in highscores:
+#         highscores[name] = max(highscores[name], score)
+#     else:
+#         highscores[name] = score
+#     save_score(highscores)
+
+def save_scores(scores):
     with open('Bestenliste.json', 'w') as file:
-        json.dump(score, file)
+        json.dump(scores, file)
 
 def load_scores():
     try:
         with open('Bestenliste.json', 'r') as file:
             return json.load(file)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
-def update_higscorelist(name, score):
+def update_highscore_list(name, score):
     highscores = load_scores()
     if name in highscores:
         highscores[name] = max(highscores[name], score)
     else:
         highscores[name] = score
-    save_score(highscores)
+    save_scores(highscores)
 
 # Beispiel:
 # update_leaderboard("Alice", 150)
