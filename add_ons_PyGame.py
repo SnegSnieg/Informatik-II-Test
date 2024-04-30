@@ -97,10 +97,10 @@ def get_end_game_input(screen, clock):
             return text
 
 # Funktion zum Schreiben der Werte eines Array als Zeilen in eine csv-Datei
-def write_to_csv(array, filename):
+def write_to_csv(score_name, filename):
     with open(filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerows(array)
+        csvwriter.writerows(score_name)
 
 
 # Funktion zum Lesen der Zeilen einer csv-Datei und speichern in einem Array
