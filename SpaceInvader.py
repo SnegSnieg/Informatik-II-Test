@@ -139,7 +139,7 @@ def main(score):
     add_ons_PyGame.write_to_csv(score_name,'highscore.csv')
     highscore_list = add_ons_PyGame.read_from_csv('highscore.csv')
     print(highscore_list)
-    add_ons_PyGame.gameloop()
+    # add_ons_PyGame.gameloop()
     
     
 

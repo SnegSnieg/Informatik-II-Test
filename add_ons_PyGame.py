@@ -129,6 +129,7 @@ def gameover(screen,RED):
 
 def gameloop():
     pygame.quit()
+    sys.exit()
 
 # Gegner Eigenschaften
 ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst
