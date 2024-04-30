@@ -94,13 +94,13 @@ def get_end_game_input(screen, clock):
 
             pygame.display.flip()
             clock.tick(60)
-            return text
+            return user_text
 
 # Funktion zum Schreiben der Werte eines Array als Zeilen in eine csv-Datei
-def write_to_csv(score_name, filename):
+def write_to_csv(array, filename):
     with open(filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerows(score_name)
+        csvwriter.writerows(array)
 
 
 # Funktion zum Lesen der Zeilen einer csv-Datei und speichern in einem Array

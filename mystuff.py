@@ -49,7 +49,7 @@ def get_end_game_input(screen, clock):
 
             pygame.display.flip()
             clock.tick(60)
-
+            
 
 # Funktion zum Schreiben der Werte eines Array als Zeilen in eine csv-Datei
 def write_to_csv(array, filename):
