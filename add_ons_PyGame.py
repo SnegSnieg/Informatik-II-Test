@@ -7,7 +7,7 @@ from io import BytesIO
 import csv
 import sys
 
-ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst
+ENEMY_WIDTH, ENEMY_HEIGHT = 20, 20   # Größe des Gegners angepasst
 
 def draw_enemies(enemies, screen):
     # Bild laden und Größe anpassen
@@ -138,6 +138,3 @@ def gameover(screen,RED):
 def gameloop():
     pygame.quit()
     sys.exit()
-
-# Gegner Eigenschaften
-ENEMY_WIDTH, ENEMY_HEIGHT = random.randint(20,50), random.randint(20,50)  # Größe des Gegners angepasst

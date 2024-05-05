@@ -29,7 +29,7 @@ background = pygame.image.load('weltall.jpg')
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 # Gegner Eigenschaften
-ENEMY_WIDTH, ENEMY_HEIGHT = 30, 30
+ENEMY_WIDTH, ENEMY_HEIGHT = 20, 20
 ENEMY_SPEED = 3
 ENEMY_INTERVAL = 60  # Intervall, in dem ein neuer Gegner erscheint
 
@@ -38,16 +38,16 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Weiche den Feinden aus")
 clock = pygame.time.Clock()
 
-# Funktion zum Erzeugen eines neuen Gegners
+# Funktion zum Erzeugen eines neuen Gegners (Position) 
 def create_enemy():
     x = random.randint(0, WIDTH - ENEMY_WIDTH)
     y = 0 - ENEMY_HEIGHT
     return pygame.Rect(x, y, ENEMY_WIDTH, ENEMY_HEIGHT)
 
 # Funktion zum Bewegen der Gegner
-def move_enemies(enemies):
+def move_enemies(enemies, speed):
     for enemy in enemies:
-        enemy.y += ENEMY_SPEED
+        enemy.y += speed
 
 # Funktion zum Zeichnen des Spielers
 def draw_player(player):
@@ -62,20 +62,28 @@ def draw_bullets(bullets):
     for bullet in bullets:
         pygame.draw.rect(screen, RED, pygame.Rect(bullet[0], bullet[1], 5, 10))  # Schuss als einfaches Rechteck zeichnen
 
+# Funktion zum Zeichnen des Scores
+def draw_score(score, color, screen):
+    font = pygame.font.Font(None, 36)
+    score_text = font.render("Score: " + str(score), True, color)
+    screen.blit(score_text, (WIDTH - 150, 10))
+
 # Hauptspiel
 def main(score):
     player = pygame.Rect(WIDTH // 2 - PLAYER_WIDTH // 2, HEIGHT - 50, PLAYER_WIDTH, PLAYER_HEIGHT)
     enemies = []
     bullets = []
-    
+    current_enemy_speed = ENEMY_SPEED
+    score_increment = 0.1
     shoot_cooldown = 0
     running = True
     while running:
         
         screen.fill(WHITE)
-        score = add_ons_PyGame.scorecounting(score,ENEMY_SPEED)
+        # score = add_ons_PyGame.scorecounting(score, ENEMY_SPEED)
+        score += score_increment 
         add_ons_PyGame.drawscore(score,BLACK,screen)
-      
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -110,7 +118,7 @@ def main(score):
         player.x = max(0, min(player.x, WIDTH - PLAYER_WIDTH))
 
         # Bewege die Gegner und füge neue hinzu
-        move_enemies(enemies)
+        move_enemies(enemies, current_enemy_speed)
         if random.randint(0, ENEMY_INTERVAL) == 0:
             enemies.append(create_enemy())
 
@@ -122,24 +130,28 @@ def main(score):
                 if enemy.colliderect(pygame.Rect(bullet[0], bullet[1], 5, 10)):
                     enemies.remove(enemy)  # Entferne den getroffenen Gegner
                     bullets.remove(bullet)  # Entferne die Kugel
+                    current_enemy_speed += 0.2
+                    score_increment += 0.2 
+                     
 
         # Zeichne Spieler und Gegner
         screen.blit(background, (0,0))
         draw_player(player)
         draw_enemies(enemies)
         draw_bullets(bullets)
+        draw_score(int(score), WHITE, screen)  # Hier wird der Score gezeichnet
 
         pygame.display.flip()
         clock.tick(60)      
     add_ons_PyGame.gameover(screen,RED)
     time.sleep(1)
-    # name = add_ons_PyGame.get_end_game_input(screen, clock)
+    
     name = input('enter your name:')
     score_name = [[name, score]]
     add_ons_PyGame.write_to_csv(score_name,'highscore.csv')
     highscore_list = add_ons_PyGame.read_from_csv('highscore.csv')
     print(highscore_list)
-    # add_ons_PyGame.gameloop()
+   
     
     
 
